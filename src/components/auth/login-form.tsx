@@ -13,34 +13,59 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { useToast } from "../../hooks/use-toast";
+import { useStore } from "../../store/store";
+import { paths } from "../../paths";
+import { useState } from "react";
+import { useNavigate } from "react-router";
 
-const formSchema = z.object({
+export const SignInFormSchema = z.object({
   email: z
     .string()
     .email({ message: "Invalid email address" })
     .min(2, { message: "Username must be at least 2 characters" }),
-  passwordHash: z.string().min(1, { message: "Password must be provided" }),
+  password: z.string().min(1, { message: "Password must be provided" }),
 });
 
 export default function LoginForm() {
+  const [loading, setLoading] = useState(false);
+  const signIn = useStore((state) => state.signIn);
+  const navigate = useNavigate();
   const { toast } = useToast();
   // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof SignInFormSchema>>({
+    resolver: zodResolver(SignInFormSchema),
     defaultValues: {
       email: "",
-      passwordHash: "",
+      password: "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof SignInFormSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
-    toast({
-      title: "Form submitted",
-      description: <p>{JSON.stringify(values)}</p>,
-    });
+    try {
+      setLoading(true);
+      await signIn(values);
+      toast({
+        title: "Logged in",
+      });
+      navigate(paths.home);
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Error",
+        description: (
+          <p>
+            {error instanceof Error
+              ? error.message
+              : "An unknown error occurred"}
+          </p>
+        ),
+        status: "error",
+      });
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -63,7 +88,7 @@ export default function LoginForm() {
 
         <FormField
           control={form.control}
-          name="passwordHash"
+          name="password"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Password</FormLabel>
@@ -74,7 +99,9 @@ export default function LoginForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit" disabled={loading}>
+          Submit
+        </Button>
       </form>
     </Form>
   );

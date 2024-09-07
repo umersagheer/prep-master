@@ -11,5 +11,6 @@ export const paths = {
     list: "/tests/:testSeriesId",
     description: "/tests/:testSeriesId/:testId",
     attempt: "/tests/:testSeriesId/:testId/attempt",
+    purchasedTests: "/purchased-tests",
   },
-} 
+};
