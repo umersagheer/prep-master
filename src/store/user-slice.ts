@@ -26,7 +26,12 @@ const initialState: UserState = {
   accessToken: "",
   role: "STUDENT",
   profilePictureUrl: "",
+  accessToken: "",
   bio: "",
+};
+
+type AccessTokenSchema = {
+  accessToken: string;
 };
 
 export type UserSlice = UserState & UserAction;
@@ -46,6 +51,14 @@ export const createUserSlice: StateCreator<
     console.log(data);
     // Handle the response here
     set((state) => {
+      state.firstName = data?.user?.firstName;
+      state.lastName = data?.user?.lastName;
+      state.email = data?.user?.email;
+      state.accessToken = data?.accessToken;
+      state.password = data?.user?.password;
+      state.role = data?.user?.role;
+      state.profilePictureUrl = data?.user?.profilePictureUrl;
+      state.bio = data?.user?.bio;
       state.firstName = data?.user?.firstName;
       state.lastName = data?.user?.lastName;
       state.email = data?.user?.email;
