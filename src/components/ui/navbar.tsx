@@ -47,23 +47,22 @@ const components: { title: string; href: string; description: string }[] = [
 ];
 
 export function NavBar() {
-  const accessToken = useStore((state) => state.accessToken);
-  const firstName = useStore((state) => state.firstName);
+  const signOut = useStore((state) => state.signOut);
+  const role = useStore((state) => state.role);
   return (
     <div className="h-[80px] shadow w-full flex items-center justify-around px-3 py-2">
       <span>
         <Link
           to="/"
-          className="font-bold text-2xl bg-gradient-to-r from-slate-900 to-green-600 text-transparent bg-clip-text"
+          className="text-2xl font-bold text-transparent bg-gradient-to-r from-slate-900 to-green-600 bg-clip-text"
         >
-          {brand.name} {accessToken}
-          {firstName}
+          {brand.name}
         </Link>
       </span>
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
-            <NavigationMenuTrigger className="rounded-full ring-1 ring-green-400 flex">
+            <NavigationMenuTrigger className="flex rounded-full ring-1 ring-green-400">
               User Profile
             </NavigationMenuTrigger>
             <NavigationMenuContent>
@@ -71,7 +70,7 @@ export function NavBar() {
                 <li className="row-span-3">
                   <NavigationMenuLink asChild>
                     <a
-                      className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
+                      className="flex flex-col justify-end w-full h-full p-6 no-underline rounded-md outline-none select-none bg-gradient-to-b from-muted/50 to-muted focus:shadow-md"
                       href="/user-profile"
                     >
                       <div className="flex items-center gap-2">
@@ -82,16 +81,24 @@ export function NavBar() {
 
                         <p className="text-sm font-normal">Username</p>
                       </div>
-                        <p>Email@ewmail.com</p>
+                      <p>Email@ewmail.com</p>
                     </a>
                   </NavigationMenuLink>
                 </li>
                 <ListItem href="/purchased-tests" title="Purchased Tests">
                   The Tests you've purchased.
                 </ListItem>
-                <ListItem href="/created-tests" title="Created Tests">
-                  The Tests you've created.
-                </ListItem>
+                {role === "TEACHER" && (
+                  <ListItem href="/created-tests" title="Created Tests">
+                    The Tests you've created.
+                  </ListItem>
+                )}
+
+                <ListItem
+                  title="Log out"
+                  className="hover:bg-rose-200"
+                  onClick={() => signOut()}
+                />
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
@@ -140,7 +147,7 @@ const ListItem = React.forwardRef<
           {...props}
         >
           <div className="text-sm font-medium leading-none">{title}</div>
-          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+          <p className="text-sm leading-snug line-clamp-2 text-muted-foreground">
             {children}
           </p>
         </a>
