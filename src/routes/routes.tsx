@@ -1,3 +1,5 @@
+import LoginPage from "../pages/login";
+import SignUp from "../pages/sign-up";
 
 import Layout from "../components/layout/Layout";
 import NotFound from "../components/layout/NotFound";
@@ -25,6 +27,14 @@ export const routes = [
     path: paths.tests.attempt,
     element: <TestAttempt/>,
     errorElement: <NotFound/>,
+  },
+  {
+    path: paths.auth.signUp,
+    element: <SignUp />,
+  },
+  {
+    path: paths.auth.logIn,
+    element: <LoginPage />,
   },
   {
     path: paths.dashboard.overview,

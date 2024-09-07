@@ -1,7 +1,8 @@
 export const paths = {
   home: "/",
   auth: {
-    signIn: "/auth/sign-in",
+    logIn: "/log-in",
+    signUp: "/sign-up",
   },
   dashboard: {
     overview: "/dashboard",
@@ -11,4 +12,4 @@ export const paths = {
     description: "/tests/:testSeriesId/:testId",
     attempt: "/tests/:testSeriesId/:testId/attempt",
   },
-} as const;
+} 
