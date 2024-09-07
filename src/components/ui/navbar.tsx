@@ -12,6 +12,7 @@ import {
 import React from "react";
 import { brand } from "../../lib/constants";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
+import { useStore } from "../../store/store";
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -46,6 +47,8 @@ const components: { title: string; href: string; description: string }[] = [
 ];
 
 export function NavBar() {
+  const accessToken = useStore((state) => state.accessToken);
+  const firstName = useStore((state) => state.firstName);
   return (
     <div className="h-[80px] shadow w-full flex items-center justify-around px-3 py-2">
       <span>
@@ -53,7 +56,8 @@ export function NavBar() {
           to="/"
           className="font-bold text-2xl bg-gradient-to-r from-slate-900 to-green-600 text-transparent bg-clip-text"
         >
-          {brand.name}
+          {brand.name} {accessToken}
+          {firstName}
         </Link>
       </span>
       <NavigationMenu>

@@ -73,7 +73,7 @@ export default function SignUpForm() {
       toast({
         title: "User created",
       });
-      navigate(paths.dashboard.overview);
+      navigate(paths.home);
     } catch (error) {
       console.log(error);
       toast({
