@@ -15,9 +15,11 @@ import { Input } from "../ui/input";
 import { useToast } from "../../hooks/use-toast";
 
 const formSchema = z.object({
-  username: z
+  email: z
     .string()
+    .email({ message: "Invalid email address" })
     .min(2, { message: "Username must be at least 2 characters" }),
+  passwordHash: z.string().min(1, { message: "Password must be provided" }),
 });
 
 export default function LoginForm() {
@@ -26,7 +28,8 @@ export default function LoginForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      email: "",
+      passwordHash: "",
     },
   });
 
@@ -42,19 +45,31 @@ export default function LoginForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
         <FormField
           control={form.control}
-          name="username"
+          name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input placeholder="example@gmail.com" {...field} />
               </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
+              <FormDescription>Must be Valid</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="passwordHash"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input type="password" {...field} />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
